@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>New Chile Base de datos</title>
+<style>
+body{margin:0;font-family:Arial;background:#0f172a;color:white}
+header{background:#020617;padding:15px;text-align:center;font-size:22px}
+nav{background:#020617;display:flex;justify-content:center;gap:10px;padding:10px}
+button{background:#1e293b;color:white;border:none;padding:10px 14px;border-radius:6px;cursor:pointer}
+button:hover{background:#334155}
+.section{display:none;padding:20px}
+.active{display:block}
+.card{background:#020617;padding:15px;border-radius:10px;margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<header>New Chile Base de datos</header>
+
+<nav>
+<button onclick="show('dni')">DNI</button>
+<button onclick="show('reg')">Registros</button>
+<button onclick="show('mdt')">MDT</button>
+<button onclick="show('admin')">Admin</button>
+</nav>
+
+<div id="dni" class="section active">
+<div class="card">
+<h2>Consulta DNI</h2>
+<input placeholder="RUT / DNI" style="width:100%;padding:8px">
+<br><br>
+<button>Buscar</button>
+</div>
+</div>
+
+<div id="reg" class="section">
+<div class="card">
+<h2>Registros</h2>
+<ul>
+<li>Vehículos</li>
+<li>Armas</li>
+<li>Propiedades</li>
+<li>Empresas</li>
+<li>Licencias</li>
+</ul>
+</div>
+</div>
+
+<div id="mdt" class="section">
+<div class="card">
+<h2>MDT Carabineros / PDI</h2>
+<p>Multas - Antecedentes - Detenciones</p>
+</div>
+</div>
+
+<div id="admin" class="section">
+<div class="card">
+<h2>Panel Administrativo</h2>
+<p>Solo personal autorizado</p>
+</div>
+</div>
+
+<script>
+function show(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>
+
