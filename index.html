@@ -2,62 +2,88 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>New Chile Base de datos</title>
+<title>Base de Datos New Chile</title>
+
 <style>
-body{margin:0;font-family:Arial;background:#0f172a;color:white}
+body{margin:0;font-family:Arial;background:linear-gradient(135deg,#020617,#0f172a);color:white}
 header{background:#020617;padding:15px;text-align:center;font-size:22px}
-nav{background:#020617;display:flex;justify-content:center;gap:10px;padding:10px}
-button{background:#1e293b;color:white;border:none;padding:10px 14px;border-radius:6px;cursor:pointer}
+nav{background:#020617;display:flex;justify-content:center;gap:10px;padding:10px;flex-wrap:wrap}
+button{background:#1e293b;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer}
 button:hover{background:#334155}
 .section{display:none;padding:20px}
 .active{display:block}
-.card{background:#020617;padding:15px;border-radius:10px;margin-bottom:10px}
+.card{background:#020617;padding:15px;border-radius:12px;max-width:500px;margin:auto}
+input,select{width:100%;padding:8px;margin-top:6px;border-radius:6px;border:none}
+.submit{margin-top:10px;width:100%;background:#16a34a}
+.log{background:#020617;padding:8px;border-radius:6px;margin-bottom:6px;font-size:14px}
 </style>
 </head>
+
 <body>
 
-<header>New Chile Base de datos</header>
+<header>Base de Datos New Chile</header>
 
 <nav>
 <button onclick="show('dni')">DNI</button>
-<button onclick="show('reg')">Registros</button>
-<button onclick="show('mdt')">MDT</button>
-<button onclick="show('admin')">Admin</button>
+<button onclick="show('veh')">Vehículos</button>
+<button onclick="show('arm')">Armas</button>
+<button onclick="show('prop')">Propiedades</button>
+<button onclick="show('admin')">Personal Autorizado</button>
 </nav>
 
+<!-- DNI -->
 <div id="dni" class="section active">
 <div class="card">
-<h2>Consulta DNI</h2>
-<input placeholder="RUT / DNI" style="width:100%;padding:8px">
-<br><br>
-<button>Buscar</button>
+<h2>Registro DNI</h2>
+<input id="dni_nom" placeholder="Nombre completo">
+<input id="dni_rut" placeholder="RUT / DNI">
+<button class="submit" onclick="save('DNI', dni_nom.value + ' - ' + dni_rut.value)">Registrar</button>
 </div>
 </div>
 
-<div id="reg" class="section">
+<!-- VEHICULOS -->
+<div id="veh" class="section">
 <div class="card">
-<h2>Registros</h2>
-<ul>
-<li>Vehículos</li>
-<li>Armas</li>
-<li>Propiedades</li>
-<li>Empresas</li>
-<li>Licencias</li>
-</ul>
+<h2>Registro Vehículo</h2>
+<input id="veh_pat" placeholder="Patente">
+<input id="veh_mod" placeholder="Modelo">
+<input id="veh_rut" placeholder="Propietario (RUT)">
+<button class="submit" onclick="save('Vehículo', veh_pat.value + ' - ' + veh_mod.value)">Registrar</button>
 </div>
 </div>
 
-<div id="mdt" class="section">
+<!-- ARMAS -->
+<div id="arm" class="section">
 <div class="card">
-<h2>MDT Carabineros / PDI</h2>
-<p>Multas - Antecedentes - Detenciones</p>
+<h2>Registro Arma</h2>
+<select id="arm_tipo">
+<option>Pistola</option>
+<option>Escopeta</option>
+<option>Rifle</option>
+</select>
+<input id="arm_serie" placeholder="Serie">
+<input id="arm_rut" placeholder="Propietario (RUT)">
+<button class="submit" onclick="save('Arma', arm_tipo.value + ' - ' + arm_serie.value)">Registrar</button>
 </div>
 </div>
 
+<!-- PROPIEDADES -->
+<div id="prop" class="section">
+<div class="card">
+<h2>Registro Propiedad</h2>
+<input id="prop_dir" placeholder="Dirección">
+<input id="prop_tipo" placeholder="Tipo (Casa, Local)">
+<input id="prop_rut" placeholder="Propietario (RUT)">
+<button class="submit" onclick="save('Propiedad', prop_dir.value + ' - ' + prop_tipo.value)">Registrar</button>
+</div>
+</div>
+
+<!-- ADMIN / LOGS -->
 <div id="admin" class="section">
 <div class="card">
-<h2>Panel Administrativo</h2>
-<p>Solo personal autorizado</p>
+<h2>Registros del Sistema (Logs)</h2>
+<div id="logs"></div>
+<button onclick="clearLogs()">Borrar Todo</button>
 </div>
 </div>
 
@@ -65,7 +91,33 @@ button:hover{background:#334155}
 function show(id){
 document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
 document.getElementById(id).classList.add('active');
+load();
 }
+
+function save(tipo, datos){
+if(!datos.trim()) return alert("Completa los datos");
+let logs = JSON.parse(localStorage.getItem("bdnc") || "[]");
+let fecha = new Date().toLocaleString();
+logs.unshift("[" + fecha + "] " + tipo + ": " + datos);
+localStorage.setItem("bdnc", JSON.stringify(logs));
+alert("Registrado correctamente ✅");
+}
+
+function load(){
+let logs = JSON.parse(localStorage.getItem("bdnc") || "[]");
+let html="";
+logs.forEach(l=> html += "<div class='log'>"+l+"</div>");
+document.getElementById("logs").innerHTML = html || "Sin registros";
+}
+
+function clearLogs(){
+if(confirm("¿Borrar todos los registros?")){
+localStorage.removeItem("bdnc");
+load();
+}
+}
+
+load();
 </script>
 
 </body>
